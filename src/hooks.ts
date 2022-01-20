@@ -10,8 +10,8 @@ import { sequence } from '@sveltejs/kit/hooks';
 export const getSession: GetSession = (request) => {
     console.error('request', request);
     return {
-        user: request?.locals?.currentUser,
-        apollo: request?.locals?.apolloClient,
+        user: request?.locals?.currentUser || {},
+        apollo: request?.locals?.apolloClient || {},
     }
 }
 
