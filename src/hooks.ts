@@ -14,7 +14,7 @@ export const getSession: GetSession = (request) => {
     }
 }
 
-export const apolloClient: Handle = async (input) => {
+const apolloClient: Handle = async (input) => {
     console.log('request apollo', input);
     const { request, resolve } = input;
 
@@ -31,7 +31,7 @@ export const apolloClient: Handle = async (input) => {
 }
 
 
-export const authMiddleware: Handle = async ({ request, resolve }) => {
+const authMiddleware: Handle = async ({ request, resolve }) => {
     let cookieManager = new CookieManager(request?.headers?.cookie);
     let accessToken = cookieManager.getCookie(config.accessTokenCookieName);
     let refreshToken = cookieManager.getCookie(config.refreshTokenCookieName);
