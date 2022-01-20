@@ -24,7 +24,7 @@ export const apolloClient: Handle = async ({ request, resolve }) => {
         ...response,
         headers: {
             ...response.headers,
-            ...request.locals.headers
+            ...request?.locals?.headers
         }
     }
 }
@@ -55,4 +55,4 @@ export const authMiddleware: Handle = async ({ request, resolve }) => {
     }
 }
 
-export const handle = sequence(apolloClient, authMiddleware)
+export const handle = sequence(authMiddleware, apolloClient)
