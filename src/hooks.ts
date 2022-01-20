@@ -40,7 +40,7 @@ export const authMiddleware: Handle = async ({ request, resolve }) => {
         refreshToken = user.refreshToken;
     }
 
-    console.log('request middleware', request.params, request.locals);
+    console.log('request middleware', request, request?.params, request?.locals);
 
     let response = await resolve(request);
     return {
@@ -56,4 +56,4 @@ export const authMiddleware: Handle = async ({ request, resolve }) => {
     }
 }
 
-export const handle = sequence(authMiddleware, apolloClient)
+export const handle = sequence(apolloClient, authMiddleware)
