@@ -15,7 +15,7 @@ export const getSession: GetSession = (request) => {
 }
 
 export const apolloClient: Handle = async ({ request, resolve }) => {
-    console.log('request apollo', request.params, request.locals);
+    console.log('request apollo', request, request?.params, request?.locals);
     request.locals.apolloClient = createServerClient(request);
 
     let response = await resolve(request);
