@@ -1,2 +1,27 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import axios from 'axios';
+
+	let url: string;
+	let isLoading: boolean = false;
+	let short: string;
+
+	let handleNewLink = async () => {
+		isLoading = true;
+		let { data } = await axios.post('/create', {
+			url,
+			withCredentials: true
+		});
+
+		isLoading = false;
+		if (data?.insertOneLink) {
+			short = data?.insertOneLink.domain.concat(data.insertOneLink.short);
+		}
+	};
+</script>
+
+{#if short}
+	<p>Short link for {url} is: {short}</p>
+{:else}
+	<input type="text" bind:value={url} disabled={isLoading} />
+	<button on:click|preventDefault={handleNewLink} disabled={isLoading}>Create short link</button>
+{/if}
