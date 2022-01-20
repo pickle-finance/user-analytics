@@ -6,6 +6,7 @@ import type { Request } from '@sveltejs/kit';
 
 import { httpLink, errorLink } from './browser-links';
 import { httpServerLink, errorServerLink } from './server-links';
+import { isEmpty } from '$lib/utils';
 
 const browserClient = createBrowserClient(browser);
 /**
@@ -45,7 +46,7 @@ function createServerClient(req: Request) {
  * @param session Sapper session store
  */
 function hydrateApolloClient(session: Session) {
-    if (!browser) {
+    if (!browser && !isEmpty(session.apollo)) {
         onDestroy(() => {
             // Replace apollo client with its cache for serialization
             session.apollo = session.apollo.extract()
