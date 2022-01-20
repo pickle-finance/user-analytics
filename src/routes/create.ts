@@ -1,7 +1,7 @@
 import { createNewLink } from "$lib/Link/model";
 
-export async function post({ body, locals }) {
-
+export async function post({ request, locals }) {
+    const body = await request.json();
     let shortLink = getShortHash(body.url).toString(16);
     return createNewLink(locals.apolloClient, {
         url: body.url,

@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 import { onDestroy } from 'svelte';
 import { ApolloClient, InMemoryCache } from "@apollo/client/core";
 import { browser, dev } from '$app/env';
-import type { Request } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit';
 
 import { httpLink, errorLink } from './browser-links';
 import { httpServerLink, errorServerLink } from './server-links';
@@ -32,7 +32,7 @@ function createBrowserClient(shouldCreate: boolean) {
  * @param res PolkaResponse
  * @returns Apollo Client
  */
-function createServerClient(req: Request) {
+function createServerClient(req: RequestEvent) {
     return new ApolloClient({
         credentials: "include",
         link: errorServerLink(req).concat(httpServerLink(req)),
@@ -46,13 +46,12 @@ function createServerClient(req: Request) {
  * @param session Sapper session store
  */
 function hydrateApolloClient(session: Session) {
-    if (!browser && !isEmpty(session.apollo)) {
+    if (!browser) {
         onDestroy(() => {
             // Replace apollo client with its cache for serialization
             session.apollo = session.apollo.extract()
         })
-    } 
-    else if (browser) {
+    } else {
         // Restore the cache string back
         browserClient.restore(session.apollo as any)
         // At client-side, the `$session.apollo` should refer to the client-side version

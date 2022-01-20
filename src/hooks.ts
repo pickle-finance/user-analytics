@@ -9,30 +9,28 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 export const getSession: GetSession = (request) => {
     return {
-        user: request?.locals?.currentUser || {},
-        apollo: request?.locals?.apolloClient || {},
+        user: request?.locals?.currentUser,
+        apollo: request?.locals?.apolloClient,
     }
 }
 
 const apolloClient: Handle = async (input) => {
-    console.log('request apollo', input);
-    const { request, resolve } = input;
+    const { event, resolve } = input;
+    event.locals.apolloClient = createServerClient(event);
 
-    request.locals.apolloClient = createServerClient(request);
-
-    let response = await resolve(request);
+    let response = await resolve(event);
     return {
         ...response,
         headers: {
             ...response.headers,
-            ...request?.locals?.headers
+            ...event.locals?.headers
         }
     }
 }
 
 
-const authMiddleware: Handle = async ({ request, resolve }) => {
-    let cookieManager = new CookieManager(request?.headers?.cookie);
+const authMiddleware: Handle = async ({ event, resolve }) => {
+    let cookieManager = new CookieManager(event.request.headers.get('cookie'));
     let accessToken = cookieManager.getCookie(config.accessTokenCookieName);
     let refreshToken = cookieManager.getCookie(config.refreshTokenCookieName);
 
@@ -42,9 +40,7 @@ const authMiddleware: Handle = async ({ request, resolve }) => {
         refreshToken = user.refreshToken;
     }
 
-    console.log('request middleware', request, request?.params, request?.locals);
-
-    let response = await resolve(request);
+    let response = await resolve(event);
     return {
         ...response,
         headers: {
