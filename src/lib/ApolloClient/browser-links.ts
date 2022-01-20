@@ -1,18 +1,26 @@
 import { config } from "$lib/config";
 import { HttpLink } from "@apollo/client/link/http";
 import { onError } from "@apollo/client/link/error";
-import { setAccessToken, removeAccessToken, removeRefreshToken, setRefreshToken } from "$lib/CookieUtil";
+import { fromPromise } from "@apollo/client/link/utils";
+import { setAccessToken, setRefreshToken } from "$lib/CookieUtil";
 import getValidAccessToken from "./authTokens";
 import CookieManager from '$lib/CookieUtil/manager';
 
-let errorLink = onError(({ networkError }) => {
+let errorLink = onError(({ networkError, forward, operation }) => {
     //@ts-ignore
     if (networkError?.statusCode === 401) {
-        let cookieManager = new CookieManager();
+        fromPromise(getValidAccessToken().then(([accessToken, _, newRefreshToken]) => {
+            let cookieManager = new CookieManager();
+            setAccessToken(cookieManager, accessToken);
+            setRefreshToken(cookieManager, newRefreshToken);
 
-        removeAccessToken(cookieManager)
-        removeRefreshToken(cookieManager);
-        return;
+            operation.setContext({
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+            return forward(operation);
+        }));
     }
 });
 

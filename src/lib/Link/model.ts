@@ -30,7 +30,7 @@ type LinkInsertInput = {
     url: string,
     short: string,
     createdAt: string
-    domain: string,
+    domain?: string,
 }
 
 export const createNewLink = async (client: ApolloClient<any>, input: LinkInsertInput) => {
