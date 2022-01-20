@@ -1,14 +1,5 @@
-import { dev } from "$app/env";
-
-let getAppHost = () => {
-    if (dev) {
-        return import.meta.env.VITE_APP_HOST
-    }
-    return import.meta.env.VITE_VERCEL_URL;
-}
-
 export const config: Record<any, any> = {
-    appHost: getAppHost(),
+    appHost: import.meta.env.VITE_APP_HOST,
     accessTokenCookieName: import.meta.env.VITE_ACCESS_TOKEN_COOKIE_NAME,
     refreshTokenCookieName: import.meta.env.VITE_REFRESH_TOKEN_COOKIE_NAME,
     appDomain: import.meta.env.VITE_APP_DOMAIN,

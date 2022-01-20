@@ -7,10 +7,12 @@
 
 	let handleNewLink = async () => {
 		isLoading = true;
-		let { data } = await axios.post('/create', {
-			url,
-			withCredentials: true
-		});
+		let { data } = await axios
+			.post('/create', {
+				url,
+				withCredentials: true
+			})
+			.then((res) => res.data);
 
 		isLoading = false;
 		if (data?.insertOneLink) {
@@ -20,7 +22,7 @@
 </script>
 
 {#if short}
-	<p>Short link for {url} is: {short}</p>
+	<p>Short link for <b>{url}</b> is: <code>{short}</code></p>
 {:else}
 	<input type="text" bind:value={url} disabled={isLoading} />
 	<button on:click|preventDefault={handleNewLink} disabled={isLoading}>Create short link</button>
