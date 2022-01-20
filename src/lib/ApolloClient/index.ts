@@ -51,7 +51,8 @@ function hydrateApolloClient(session: Session) {
             // Replace apollo client with its cache for serialization
             session.apollo = session.apollo.extract()
         })
-    } else {
+    } 
+    else if (browser) {
         // Restore the cache string back
         browserClient.restore(session.apollo as any)
         // At client-side, the `$session.apollo` should refer to the client-side version
