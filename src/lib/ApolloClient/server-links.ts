@@ -30,7 +30,7 @@ let httpServerLink = (req: RequestEvent) => {
     return new HttpLink({
         uri: config.apiUrl + "/app/" + config.realmAppId + "/graphql",
         fetch: async (url: string, options: any) => {
-            const [accessToken, shouldUpdateCookie, newRefreshToken] = await getValidAccessToken(req.request?.headers?.get('cookie'));
+            const [accessToken, shouldUpdateCookie, newRefreshToken] = await getValidAccessToken(req.request?.headers?.cookie);
             options.headers.Authorization = `Bearer ${accessToken}`;
             if (shouldUpdateCookie) {
                 if (newRefreshToken) {

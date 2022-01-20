@@ -14,8 +14,7 @@ export const getSession: GetSession = (request) => {
     }
 }
 
-const apolloClient: Handle = async (input) => {
-    const { event, resolve } = input;
+const apolloClient: Handle = async ({ event, resolve }) => {
     event.locals.apolloClient = createServerClient(event);
 
     let response = await resolve(event);
@@ -30,7 +29,7 @@ const apolloClient: Handle = async (input) => {
 
 
 const authMiddleware: Handle = async ({ event, resolve }) => {
-    let cookieManager = new CookieManager(event.request.headers.get('cookie'));
+    let cookieManager = new CookieManager(event.request.headers.cookie);
     let accessToken = cookieManager.getCookie(config.accessTokenCookieName);
     let refreshToken = cookieManager.getCookie(config.refreshTokenCookieName);
 
