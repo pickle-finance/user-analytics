@@ -1,4 +1,4 @@
-import { Data, observableQueryToWritable, observableToWritable } from "./observable";
+import { observableQueryToWritable, observableToWritable } from "./observable";
 import type { WritableQuery, WritableResult } from "./observable";
 import type { ApolloClient, SubscriptionOptions, WatchQueryOptions } from '@apollo/client/core';
 

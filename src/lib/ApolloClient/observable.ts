@@ -1,4 +1,5 @@
-import type { FetchResult, Observable, ObservableQuery, ApolloError } from "@apollo/client/core";
+import type { FetchResult, Observable, ObservableQuery } from "@apollo/client/core";
+import { ApolloError } from "@apollo/client/core";
 import { writable } from "svelte/store";
 import type { Writable } from "svelte/store";
 
