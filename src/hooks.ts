@@ -9,8 +9,8 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 export const getSession: GetSession = (request) => {
     return {
-        user: request.locals.currentUser,
-        apollo: request.locals.apolloClient
+        user: request?.locals?.currentUser || {},
+        apollo: request?.locals?.apolloClient || createServerClient(request),
     }
 }
 
