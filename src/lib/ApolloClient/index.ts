@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 import { onDestroy } from 'svelte';
 import { ApolloClient, InMemoryCache } from "@apollo/client/core";
 import { browser, dev } from '$app/env';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { Request } from '@sveltejs/kit';
 
 import { httpLink, errorLink } from './browser-links';
 import { httpServerLink, errorServerLink } from './server-links';
@@ -32,7 +32,7 @@ function createBrowserClient(shouldCreate: boolean) {
  * @param res PolkaResponse
  * @returns Apollo Client
  */
-function createServerClient(req: RequestEvent) {
+function createServerClient(req: Request) {
     return new ApolloClient({
         credentials: "include",
         link: errorServerLink(req).concat(httpServerLink(req)),

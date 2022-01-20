@@ -14,22 +14,22 @@ export const getSession: GetSession = (request) => {
     }
 }
 
-const apolloClient: Handle = async ({ event, resolve }) => {
-    event.locals.apolloClient = createServerClient(event);
+const apolloClient: Handle = async ({ request, resolve }) => {
+    request.locals.apolloClient = createServerClient(request);
 
-    let response = await resolve(event);
+    let response = await resolve(request);
     return {
         ...response,
         headers: {
             ...response.headers,
-            ...event.locals?.headers
+            ...request.locals?.headers
         }
     }
 }
 
 
-const authMiddleware: Handle = async ({ event, resolve }) => {
-    let cookieManager = new CookieManager(event.request.headers.cookie);
+const authMiddleware: Handle = async ({ request, resolve }) => {
+    let cookieManager = new CookieManager(request.headers.cookie);
     let accessToken = cookieManager.getCookie(config.accessTokenCookieName);
     let refreshToken = cookieManager.getCookie(config.refreshTokenCookieName);
 
@@ -39,7 +39,7 @@ const authMiddleware: Handle = async ({ event, resolve }) => {
         refreshToken = user.refreshToken;
     }
 
-    let response = await resolve(event);
+    let response = await resolve(request);
     return {
         ...response,
         headers: {

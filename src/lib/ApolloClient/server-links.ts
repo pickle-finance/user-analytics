@@ -4,9 +4,9 @@ import { onError } from "@apollo/client/link/error";
 import { fromPromise } from "@apollo/client/link/utils";
 import { serializeAccessToken, serializeRefreshToken } from "$lib/CookieUtil";
 import getValidAccessToken from "./authTokens";
-import type { RequestEvent } from "@sveltejs/kit";
+import type { Request } from "@sveltejs/kit";
 
-let errorServerLink = (req: RequestEvent) => onError(({ networkError, forward, operation }) => {
+let errorServerLink = (req: Request) => onError(({ networkError, forward, operation }) => {
     //@ts-ignore
     if (networkError?.statusCode === 401) {
         fromPromise(getValidAccessToken().then(([accessToken, _, newRefreshToken]) => {
@@ -26,11 +26,11 @@ let errorServerLink = (req: RequestEvent) => onError(({ networkError, forward, o
     }
 });
 
-let httpServerLink = (req: RequestEvent) => {
+let httpServerLink = (req: Request) => {
     return new HttpLink({
         uri: config.apiUrl + "/app/" + config.realmAppId + "/graphql",
         fetch: async (url: string, options: any) => {
-            const [accessToken, shouldUpdateCookie, newRefreshToken] = await getValidAccessToken(req.request?.headers?.cookie);
+            const [accessToken, shouldUpdateCookie, newRefreshToken] = await getValidAccessToken(req.headers.cookie);
             options.headers.Authorization = `Bearer ${accessToken}`;
             if (shouldUpdateCookie) {
                 if (newRefreshToken) {
