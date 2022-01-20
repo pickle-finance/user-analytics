@@ -8,9 +8,10 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 
 export const getSession: GetSession = (request) => {
+    console.error('request', request);
     return {
-        user: request?.locals?.currentUser || {},
-        apollo: request?.locals?.apolloClient || createServerClient(request),
+        user: request?.locals?.currentUser,
+        apollo: request?.locals?.apolloClient,
     }
 }
 
@@ -34,7 +35,7 @@ export const authMiddleware: Handle = async ({ request, resolve }) => {
     let accessToken = cookieManager.getCookie(config.accessTokenCookieName);
     let refreshToken = cookieManager.getCookie(config.refreshTokenCookieName);
 
-    if (!accessToken && !refreshToken) {
+    if (!accessToken || !refreshToken) {
         const user = await auth.request();
         accessToken = user.accessToken;
         refreshToken = user.refreshToken;
