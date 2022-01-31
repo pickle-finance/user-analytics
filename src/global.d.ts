@@ -11,6 +11,10 @@ interface ImportMetaEnv {
     VITE_REALM_APP_ID: string;
     VITE_REALM_API_KEY: string;
     VITE_API_URL: string;
+    VITE_POSTHOG_TOKEN: string;
+    VITE_POSTHOG_HOST: string;
+    VITE_POSTHOG_EVENT_NAME: string;
+    VITE_POSTHOG_COOKIE_NAME: string;
 }
 
 interface Session {

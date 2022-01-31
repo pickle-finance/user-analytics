@@ -1,0 +1,9 @@
+{
+    "field_name": "createOrUpdateOneLink",
+    "function_name": "createOrUpdateLink",
+    "input_type": "LinkInsertInput",
+    "input_type_format": "generated",
+    "on_type": "Mutation",
+    "payload_type": "Link",
+    "payload_type_format": "generated"
+}

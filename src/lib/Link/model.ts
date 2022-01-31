@@ -1,58 +1,90 @@
 import { gql } from '@apollo/client/core';
 import type { ApolloClient } from '@apollo/client/core';
 import { readQuery } from '$lib/ApolloClient/query';
-import { config } from '$lib/config';
-
 
 const createLink = gql`
-    mutation insertOneLink($link: LinkInsertInput!) {
-        insertOneLink(data: $link) {
-            short
+    mutation createOrUpdateOneLink($link: LinkInsertInput!) {
+        createOrUpdateOneLink(input: $link) {
+            _id
             url
-            domain
-            createdAt
+            shortLinks {
+                _id
+                campaign
+                createdAt
+                link {
+                    _id
+                }
+                medium
+                source
+            }
         }
     }
 `;
 
 const linkInfo = gql`
-    query link($query: LinkQueryInput!) {
-        link(query: $query) {
-            short
-            url
-            domain
+    query shortLink($query: ShortLinkQueryInput!) {
+        shortLink(query: $query) {
+            _id
+            campaign
             createdAt
+            link {
+                _id
+                url
+            }
+            medium
+            source
+        }
+    }
+`;
+
+const linksInfo = gql`
+    query links($query: LinkQueryInput, $limit: Int = 100, $sortBy: LinkSortByInput = _ID_DESC) {
+        links(query: $query, limit: $limit, sortBy: $sortBy) {
+            _id
+            url
+            shortLinks {
+                _id
+                campaign
+                createdAt
+                link {
+                    _id
+                }
+                medium
+                source
+            }
         }
     }
 `;
 
 type LinkInsertInput = {
     url: string,
-    short: string,
-    createdAt: string
-    domain?: string,
+    hash: string,
+    shortLinks: {
+        create: Array<{
+            campaign?: string,
+            createdAt: string,
+            medium?: string,
+            source?: string,
+        }>,
+    }
 }
 
 export const createNewLink = async (client: ApolloClient<any>, input: LinkInsertInput) => {
     return client.mutate({
         mutation: createLink,
         variables: {
-            link: {
-                ...input,
-                domain: config.appHost + "/l/"
-            }
+            link: input,
         }
     });
 }
 
 type LinkQueryInput = {
-    url?: string,
-    short?: string
+    url?: string
 }
 
-export const loadLink = async (client: ApolloClient<any>, query: LinkQueryInput) => {
+export const loadLinks = async (client: ApolloClient<any>, query: LinkQueryInput = {}) => {
     let response = await client.query({
-        query: linkInfo,
+        query: linksInfo,
         variables: { query },
         fetchPolicy: 'network-only'
     });
@@ -60,6 +92,18 @@ export const loadLink = async (client: ApolloClient<any>, query: LinkQueryInput)
     return response;
 };
 
-export const readLink = async (client: ApolloClient<any>, query: LinkQueryInput) => {
-    return readQuery(client, { query: linkInfo, variables: { query } });
+export const readLinks = (client: ApolloClient<any>, query: LinkQueryInput = {}) => {
+    return readQuery(client, { query: linksInfo, variables: { query } });
 }
+
+type ShortLinkQueryInput = {
+    _id: string
+}
+
+export const loadShortLink = async (client: ApolloClient<any>, query: ShortLinkQueryInput) => {
+    return client.query({
+        query: linkInfo,
+        variables: { query },
+        fetchPolicy: 'network-only'
+    });
+};

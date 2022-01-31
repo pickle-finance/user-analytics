@@ -1,0 +1,44 @@
+{
+    "collection": "links",
+    "database": "data",
+    "roles": [
+        {
+            "name": "default",
+            "apply_when": {},
+            "write": true,
+            "insert": true,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "relationships": {
+        "shortLinks": {
+            "foreign_key": "_id",
+            "source_key": "shortLinks",
+            "ref": "#/relationship/mongodb-atlas/data/shortLinks",
+            "is_list": true
+        }
+    },
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "hash": {
+                "bsonType": "string"
+            },
+            "url": {
+                "bsonType": "string"
+            },
+            "shortLinks": {
+                "bsonType": "array",
+                "uniqueItems": true,
+                "items": {
+                    "bsonType": "objectId"
+                }
+            }
+        },
+        "title": "link"
+    }
+}

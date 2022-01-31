@@ -1,5 +1,5 @@
 import { observableQueryToWritable, observableToWritable } from "./observable";
-import type { WritableQuery, WritableResult } from "./observable";
+import type { WritableQuery, WritableResult, Data } from "./observable";
 import type { ApolloClient, SubscriptionOptions, WatchQueryOptions } from '@apollo/client/core';
 
 // TODO: Test this and use as a replacement of getQuery

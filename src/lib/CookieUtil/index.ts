@@ -6,8 +6,6 @@ import type { CookieManager } from 'svelboost/src';
 let accessTokenCookieName = config.accessTokenCookieName;
 let refreshTokenCookieName = config.refreshTokenCookieName;
 
-let chainIdCookieName: string = "amplifyAppChainId";
-
 export function setAccessToken(manager: CookieManager, accessToken: string) {
     return manager.setCookie(accessTokenCookieName, accessToken, {
         path: '/',
@@ -19,14 +17,6 @@ export function setAccessToken(manager: CookieManager, accessToken: string) {
 
 export function setRefreshToken(manager: CookieManager, refreshToken: string) {
     return manager.setCookie(refreshTokenCookieName, refreshToken, {
-        path: '/',
-        domain: config.appDomain,
-        httpOnly: false,
-    })
-}
-
-export function setChainCookie(manager: CookieManager, chainId: number) {
-    return manager.setCookie(chainIdCookieName, chainId, {
         path: '/',
         domain: config.appDomain,
         httpOnly: false,
@@ -72,8 +62,8 @@ export function serializeRefreshToken(refreshToken: string, options?: cookie.Coo
     })
 }
 
-export function serializeChainCookie(chainId: string, options?: cookie.CookieSerializeOptions) {
-    return cookie.serialize(chainIdCookieName, chainId, {
+export function serializeCookie(cookieName: string, value: string, options?: cookie.CookieSerializeOptions) {
+    return cookie.serialize(cookieName, value, {
         path: '/',
         domain: config.appDomain,
         httpOnly: false,
@@ -84,8 +74,4 @@ export function serializeChainCookie(chainId: string, options?: cookie.CookieSer
 
 export function getRefreshToken(manager: CookieManager) {
     return manager.checkCookie(refreshTokenCookieName)
-}
-
-export function getChainCookie(manager: CookieManager) {
-    return manager.checkCookie(chainIdCookieName);
 }
