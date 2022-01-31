@@ -1,3 +1,4 @@
+import { Observable } from "@apollo/client/core";
 import type { GraphQLError } from "graphql";
 
 type DefaultResponse<Data> = {
@@ -26,5 +27,15 @@ function responseHandler<QueryResponse>(response: DefaultResponse<QueryResponse>
         return { error: null, data: queryName ? response.data[queryName] : response.data }
     }
 }
+
+// Convert promise like object to observable
+export let promiseToObservable = (promise: Promise<any>) =>
+    new Observable(observer => {
+        promise.then(data => {
+            if (observer.closed) return;
+            observer.next(data);
+            observer.complete();
+        }).catch(err => observer.error(err));
+    });
 
 export default responseHandler;

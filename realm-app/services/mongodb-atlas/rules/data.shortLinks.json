@@ -1,0 +1,46 @@
+{
+    "collection": "shortLinks",
+    "database": "data",
+    "roles": [
+        {
+            "name": "default",
+            "apply_when": {},
+            "write": true,
+            "insert": true,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "relationships": {
+        "link": {
+            "foreign_key": "hash",
+            "source_key": "link",
+            "ref": "#/relationship/mongodb-atlas/data/links",
+            "is_list": false
+        }
+    },
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "link": {
+                "bsonType": "string"
+            },
+            "campaign": {
+                "bsonType": "string"
+            },
+            "source": {
+                "bsonType": "string"
+            },
+            "medium": {
+                "bsonType": "string"
+            },
+            "createdAt": {
+                "bsonType": "string"
+            }
+        },
+        "title": "shortLink"
+    }
+}

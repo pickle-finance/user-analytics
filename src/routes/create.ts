@@ -1,11 +1,26 @@
 import { createNewLink } from "$lib/Link/model";
+import { isEmpty } from "$lib/utils";
 
 export async function post({ body, locals }) {
-    let shortLink = getShortHash(body.url).toString(16);
+    if (isEmpty(body)) {
+        return {
+            status: 400,
+            body: {
+                error: "params are required"
+            }
+        }
+    }
+
+    let hash = getShortHash(body.url).toString(16);
     return createNewLink(locals.apolloClient, {
         url: body.url,
-        short: shortLink,
-        createdAt: new Date().getTime().toString()
+        hash,
+        shortLinks: {
+            create: [{
+                ...body.shortLinkProps,
+                createdAt: new Date().getTime().toString()
+            }]
+        }
     }).then(res => {
         return {
             status: 200,
@@ -18,7 +33,6 @@ export async function post({ body, locals }) {
         }
     });
 }
-
 
 function getShortHash(url: string) {
     var hash = 5381,

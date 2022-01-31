@@ -1,6 +1,6 @@
 import realmClient from "$lib/RealmClient";
 import { config } from "$lib/config";
-import CookieManager from '$lib/CookieUtil/manager';
+import { CookieManager } from 'svelboost/src';
 
 // TODO: add enhancement to validate the accessToken using Realm Admin API
 async function getValidAccessToken(cookies?: string) {

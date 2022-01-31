@@ -1,6 +1,6 @@
 import { isEmpty } from "$lib/utils";
 import realmClient from '$lib/RealmClient';
-import CookieManager from '$lib/CookieUtil/manager';
+import { CookieManager } from 'svelboost/src';
 import { removeAccessToken, removeRefreshToken } from '$lib/CookieUtil';
 
 import type { ApolloClient } from '@apollo/client/core';
