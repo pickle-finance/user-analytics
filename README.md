@@ -61,5 +61,5 @@ Before use will start developing, you should connect the following dependencies:
     VITE_ACCESS_TOKEN_COOKIE_NAME="dev_accessToken" // this is the name of the cookie that will be used to store the refresh token (e.g. for preview branches you can use "stage_accessToken", for production "accessToken")
 ```
 
--- Connect this app to Vercel via (npx vercel)
--- Import environment variables for Vercel (npm run pre-dev)
+- Connect this app to Vercel via (npx vercel)
+- Import environment variables for Vercel (npm run pre-dev)
